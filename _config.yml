@@ -1,0 +1,7 @@
+title: MESA School 2026
+description: Lab notes
+remote_theme: just-the-docs/just-the-docs
+plugins:
+  - jekyll-remote-theme
+color_scheme: dark
+search_enabled: false
