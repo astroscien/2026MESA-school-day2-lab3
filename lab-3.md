@@ -337,18 +337,8 @@ xa_central_lower_limit(1) = 0.01
 
 ## 7. What to Record
 
-For each run, record the following quantities in the spreadsheet:
-
-- initial mass,
-- mixing prescription,
-- overshooting or penetration control parameters,
-- wall-clock runtime from ZAMS to TAMS,
-- final age,
-- final luminosity,
-- final radius,
-- for penetration runs, `alpha_pen_zone`,
-- the first 10 to 20 g modes,
-- the `g_10` mode as a compact seismic diagnostic.
+For each run, record the following quantities in the spreadsheet: initial mass, final age/luminosity/radius, the first 10 to 20 g modes, the `g_10` mode as a compact seismic diagnostic.
+For penetration runs, `alpha_pen_zone`.
 
 ---
 
