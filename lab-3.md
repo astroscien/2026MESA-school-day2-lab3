@@ -1,8 +1,3 @@
----
-title: Lab 3
-nav_order: 3
----
-
 # Lab 3: Convective Boundary Mixing in MESA
 
 In this lab, we compare three ways of treating mixing near the edge of a convective core:
