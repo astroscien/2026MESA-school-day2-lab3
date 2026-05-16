@@ -1,25 +1,22 @@
-## A Short Introduction to How GYRE Finds Oscillation Modes
+## A Short Introduction to How GYRE Finds Oscillation Modes (Proofread by Rich)
 
-GYRE solves the stellar pulsation equations as a boundary-value eigenvalue problem.  
-The unknowns are the oscillation variables inside the star, and the oscillation frequency is the eigenvalue. Only special frequencies satisfy the physical boundary conditions at both the center and the surface. Those special frequencies are the stellar modes. 
+GYRE solves the stellar oscillation equations, a set of differential equations and boundary conditions that describe small, periodic perturbations about a star's equilibrium state. Consistent solutions to these equations (known as "modes") can be found only for certain specific choices of the perturbation frequency, and so the frequency takes on the mathematical role of an eigenvalue.
 
-GYRE uses a method called **Magnus Multiple Shooting**. Instead of solving the whole star in one step, it divides the star into many small radial intervals. In each interval, it computes how the oscillation solution moves from one grid point to the next, and then it requires all neighboring pieces to match smoothly.
-
-This matching problem can be written in matrix form as
+To calculate the frequency eigenvalues (or "eigenfrequencies") of a stellar model (obtained, for instance, from MESA), GYRE sets up a large system of algebraic equations. These equations are derived from finite-difference approximations to the oscillation differential equations, taken between pairs of adjacent spatial grid points. In symbolic form, the algebraic equations can be written as
 
 $$
 S u = 0,
 $$
 
-where $u$ contains the oscillation variables on the shooting grid, and $S$ is the global matrix that enforces the boundary conditions and the matching conditions between adjacent intervals. A non-trivial solution exists only when
+where $S$ is a matrix of coefficients and $u$ is a vector of unknowns representing the perturbations at each grid point. Solutions to this equation only exist when
 
 $$
 \det(S) = 0.
 $$
 
-GYRE searches for frequencies at which the matrix $S$ becomes singular. Those frequencies are the eigenfrequencies of the stellar model.
+and so GYRE's task is to search for the frequencies at which the determinant of $S$ vanishes. Once these eigenfrequencies are found, GYRE reconstructs the associated eigenfunctions (describing the spatial dependence of perturbations) from the vector $u$.
 
-Once a root is found, GYRE reconstructs the corresponding eigenfunction, that is, the radial shape of the mode inside the star. This useful tool lets us compare the mode frequencies predicted by a stellar model with the frequencies observed in real stars.
+The eigenfrequencies of a star depend on the detailed internal structure of the star. Therefore, by comparing a set of eigenfrequencies for a given stellar model against those observed in a real star, we can test how well the model represents the real star --- a technique known as asteroseismology.
 
 ## Reference
 - [Townsend, R. H. D., & Teitler, S. A. 2013, *MNRAS*, 435, 3406](https://ui.adsabs.harvard.edu/abs/2013MNRAS.435.3406T/abstract)
