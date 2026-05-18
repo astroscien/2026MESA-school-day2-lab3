@@ -122,7 +122,7 @@
     terminal_interval = 100
     do_history_file = .true.
     history_interval = 1
-    star_history_name = 'history.data'
+    star_history_name = 'PC_MS.history'
 
     write_profiles_flag = .true.
     max_num_profile_models = 99999
