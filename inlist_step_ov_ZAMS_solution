@@ -1,0 +1,112 @@
+&star_job
+
+  pgstar_flag = .false. ! Turn off the pgstar graphical interface.
+
+  ! begin with a pre-main sequence model
+    create_pre_main_sequence_model = .true.
+    load_saved_model = .false.
+
+  ! save a model at the end of the run
+    save_model_when_terminate = .true.
+    save_model_filename = './LOGS_step_ov/step_ov_zams.model'	! Filename of the saved ZAMS model. This will be used as the initial model for the next evolutionary run.
+
+! will be changed on the fly post C depletion
+    new_net_name =  'cno_extras_o18_to_mg26_plus_fe56.net'	! 'mesa_45.net'
+    show_net_species_info = .false.
+
+    initial_zfracs = 8			! Set the initial metal mixture.
+
+/ ! end of star_job namelist
+
+
+&eos
+/ ! end of eos namelist
+
+
+&kap
+
+    use_Type2_opacities = .true.	! Use Type 2 opacity tables, which allow changes in C/O abundances.
+    Zbase = 0.02000d0			! Base metallicity used for the opacity tables.
+    kap_file_prefix = 'OP_a09_nans_removed_by_hand' ! Opacity table prefix. Here this selects the OP A09 opacity table.
+
+    ! Use cubic interpolation in hydrogen mass fraction X and in metallicity Z.
+    cubic_interpolation_in_X = .true.
+    cubic_interpolation_in_Z = .true.
+
+/ ! end of kap namelist
+
+
+&controls
+
+    initial_mass = X.Xd0		! in Msun units
+    initial_z = 0.02000d0
+
+! Mixing
+    min_D_mix = 1000.0000d0		! Minimum diffusion coefficient for mixing
+    set_min_D_mix = .true.
+
+    use_Ledoux_criterion = .true.	! Use the Ledoux criterion for convective stability.
+    MLT_option = 'Cox'			! Use the Cox formulation of mixing-length theory.
+    mixing_length_alpha = 1.8d0
+
+    do_conv_premix = .true.		! Enable convective premixing.
+    predictive_mix(1) = .false.		! Turn off predictive mixing for this boundary.
+    predictive_zone_type(1) = 'any'	! Apply this predictive-mixing setting to any zone type.
+    predictive_zone_loc(1) = 'core'	! Apply this predictive-mixing setting to the convective core.
+    predictive_bdy_loc(1) = 'top'	! Apply this predictive-mixing setting to the top boundary of the convective core.
+
+! Overshooting
+    overshoot_scheme(1) = 'step'
+    overshoot_zone_type(1) = 'any'
+    overshoot_zone_loc(1) = 'core'
+    overshoot_bdy_loc(1) = 'top'
+    overshoot_f(1) = X.X
+    overshoot_f0(1) = 0.005d0
+    overshoot_D_min = 1d-2
+
+! add superadiabatic reduction for massive stars
+    use_superad_reduction = .true.	! Enable superadiabatic gradient reduction. This can help numerical stability.
+    superad_reduction_Gamma_limit = 0.5d0	! Gamma threshold for applying superadiabatic reduction.
+    superad_reduction_Gamma_limit_scale = 5d0
+    superad_reduction_Gamma_inv_scale = 5d0
+    superad_reduction_diff_grads_limit = 1d-3
+
+! Atmosphere
+
+    atm_option = 'T_tau'		! Use a T-tau atmospheric boundary condition.
+    atm_T_tau_relation = 'Eddington'	! Use the Eddington T-tau relation.
+    atm_T_tau_opacity = 'varying'	! Use varying opacity in the T-tau atmosphere.
+
+! Wind
+
+    hot_wind_scheme = 'Dutch'
+    cool_wind_RGB_scheme = 'Dutch'
+    cool_wind_AGB_scheme = 'Dutch'
+    Dutch_scaling_factor = 0.8d0
+
+! Solver
+
+    energy_eqn_option = 'dedt'		! Use the dE/dt form of the energy equation.
+    use_gold_tolerances = .true.
+
+! Resolution
+
+    max_allowed_nz = 10000000		! Maximum allowed number of mesh cells.
+    mesh_delta_coeff = 0.4		! Mesh resolution control. Smaller values give finer spatial resolution.
+    time_delta_coeff = 0.5		! Timestep control. Smaller values give smaller timesteps.
+    varcontrol_target = 1d-4		! Target accuracy for timestep control.
+    min_allowed_varcontrol_target = 1d-5
+    num_cells_for_smooth_gradL_composition_term = 10
+    threshold_for_smooth_gradL_composition_term = 0.02
+    num_cells_for_smooth_brunt_B = 10
+    threshold_for_smooth_brunt_B = 0.1
+
+! When to stop
+
+    stop_near_zams = .true.
+
+/ ! end of controls namelist
+
+
+&pgstar
+/ ! end of pgstar namelist
