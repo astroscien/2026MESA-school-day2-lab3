@@ -583,6 +583,14 @@ ax_prop.legend(frameon=False, fontsize=10, ncol=2)
 fig.savefig("compare_XcH050_structure.png", dpi=300, bbox_inches="tight")
 ```
 
+### Example Output
+
+The figure below shows an example comparison at approximately `Xc(H) = 0.5`. The upper panel compares the hydrogen and helium abundance profiles, while the lower panel shows the corresponding propagation diagram for the three mixing prescriptions.
+
+<img src="https://github.com/astroscien/2026MESA-school-day2-lab3/blob/main/compare_XcH050_structure.png?raw=true" width="750">
+
+---
+
 ## References
 
 - [Johnston et al. (2024)](https://ui.adsabs.harvard.edu/abs/2024ApJ...964..170J/abstract), *Modelling Time-dependent Convective Penetration in 1D Stellar Evolution*, ApJ, 964, 170.
