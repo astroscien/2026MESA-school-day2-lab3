@@ -1,101 +1,86 @@
-# Lab 3: Convective Boundary Mixing in MESA
+# Lab 3: Convective Boundary Mixing, Stellar Structure, and g Modes
 
-In this lab, we compare three ways of treating mixing near the edge of a convective core:
+## Task 0. Goal of This Lab
+
+In this lab, we will study how different convective boundary mixing prescriptions affect stellar evolution, internal structure, and g-mode pulsations. There are three treatments of mixing near the top boundary of a hydrogen burning convective core:
 
 1. step overshooting,
 2. exponential overshooting,
 3. convective penetration.
 
-The goal is to understand how different convective boundary mixing prescriptions modify the stellar structure near the core boundary, and how those structural changes affect g-mode pulsations.
+The main goal is to understand how these mixing prescriptions modify the near-core chemical-gradient region and the Brunt–Väisälä frequency profile. These structural differences may leave measurable signatures in stellar eigenmodes.
 
-We will first compare the MESA namelist settings for step and exponential overshooting. Then we will look at how a custom `run_star_extras.f90` file can be used to implement convective penetration.
+In the first part of the lab, we will build MESA models using different mixing prescriptions. Next, we will inspect their internal structures at an intermediate main-sequence stage. Finally, we will use GYRE to compute g-mode frequencies, compare them with a reference set of modes, and identify the best-fit model.
 
 ---
 
-## 1. Step and Exponential Overshooting
+## Task 1. Step and Exponential Overshooting
 
-In MESA, step and exponential overshooting can be controlled directly from the inlist.
-
-For both prescriptions, we will apply overshooting at the top boundary of the hydrogen-burning convective core:
+In MESA, step and exponential overshooting are built-in prescriptions that can be controlled from the inlist. For both prescriptions, we apply overshooting at the top boundary of the convective core:
 
 ```fortran
-overshoot_zone_type(1) = 'burn_H'
+overshoot_zone_type(1) = 'any'
 overshoot_zone_loc(1)  = 'core'
 overshoot_bdy_loc(1)   = 'top'
 ```
 
-These three lines tell MESA where the overshooting is applied:
+These lines tell MESA where the overshooting is applied:
 
-- `burn_H`: apply this prescription during core hydrogen burning;
+- `any`: allow this prescription to be applied to any relevant convective boundary;
 - `core`: apply it to a convective core;
 - `top`: apply it at the outer edge of the convective core.
 
 ---
 
-## 2. Exponential Overshooting
+## Task 2. Step Overshooting
 
-Exponential overshooting assumes that the mixing coefficient decreases smoothly outside the formal convective boundary.
+Step overshooting assumes that the material is fully mixed out to a fixed distance beyond the formal convective boundary. Use the same location controls, but change the scheme:
+
+```fortran
+overshoot_scheme(1) = 'step'
+
+overshoot_f(1) = 0.2d0
+overshoot_f0(1) = 0.005d0
+overshoot_D_min = 1d-2
+```
+
+The difference between `overshoot_f` and `overshoot_f0` is shown schematically below. `overshoot_D_min` sets the lower cutoff for the overshoot mixing diffusion coefficient.
+
+![MESA overshooting schematic](https://mesa-leuven.4d-star.org/tutorials/monday/overshoot_explanation.png)
+
+*Credit: 2025 MESA School in Leuven Day 1 tutorial material.*
+
+The convective boundary is where the convective diffusion coefficient drops to zero. MESA steps slightly inward from this boundary by a distance `overshoot_f0 * H_p`. The main overshooting length scale is controlled by `overshoot_f * H_p`, where `H_p` is the local pressure scale height.
+
+---
+
+## Task 3. Exponential Overshooting
+
+Exponential overshooting assumes that the mixing coefficient decreases smoothly outside the convective boundary.
 
 A typical setup is
 
 ```fortran
 overshoot_scheme(1) = 'exponential' ! options: 'exponential', 'step', 'other'
-overshoot_zone_type(1) = 'any'   ! options: 'burn_H', 'burn_He', 'burn_Z', 'nonburn', 'any'
-overshoot_zone_loc(1) = 'core'      ! options: 'core', 'shell', 'any'
-overshoot_bdy_loc(1) = 'top'        ! options: 'bottom', 'top', 'any'
 
-overshoot_f(1) = 0.2d0
+overshoot_f(1) = 0.02d0
 overshoot_f0(1) = 0.005d0
 overshoot_D_min = 1d-2
 ```
-
-Here, `overshoot_f(1)` controls the scale length of the exponential decay of the mixing coefficient outside the convective boundary.
-
-The parameter `overshoot_f0(1)` tells MESA where to evaluate the reference diffusion coefficient slightly inside the convective region.
 
 In the model grid, we will vary `overshoot_f(1)`.
 
 ---
 
-## 3. Step Overshooting
+## Task 4. Convective Penetration
 
-Step overshooting assumes that the material is fully mixed out to a fixed distance beyond the formal convective boundary.
-
-Use the same location controls, but change the scheme:
-
-```fortran
-overshoot_scheme(1) = 'step'
-overshoot_zone_type(1) = 'any'
-overshoot_zone_loc(1) = 'core'
-overshoot_bdy_loc(1) = 'top'
-
-overshoot_f(1) = 0.2d0
-overshoot_f0(1) = 0.005d0
-overshoot_D_min = 1d-2
-```
-
-For step overshooting, `overshoot_f(1)` gives the approximate radial extent of the fully mixed overshoot region in units of the local pressure scale height.
-
-In this lab, this parameter is equivalent to the commonly used `alpha_ov`.
-
----
-
-## 4. Convective Penetration
-
-Convective penetration is different from standard MESA overshooting.
-
-In ordinary overshooting, material beyond the convective boundary is chemically mixed, but the thermal structure is usually still treated as radiative.
-
-In convective penetration, convective motions penetrate into the formally stable region and can modify both the chemical composition and the thermal stratification. In the implementation used here, the penetration extent is not entered directly as a standard MESA namelist parameter. Instead, it is computed inside `run_star_extras.f90`.
+Convective penetration is different from standard MESA overshooting. Material beyond the convective boundary is chemically mixed, but the thermal structure is usually still treated as radiative. In convective penetration, convective motions penetrate into the formally stable region and can modify both the chemical composition and the thermal stratification. In the implementation used here, the penetration extent is computed inside `run_star_extras.f90`.
 
 For the convective penetration runs, use
 
 ```fortran
 ! Overshooting
 overshoot_scheme(1) = 'other'
-overshoot_zone_type(1) = 'any'
-overshoot_zone_loc(1) = 'core'
-overshoot_bdy_loc(1) = 'top'
 
 overshoot_f(1) = 0.00
 overshoot_f0(1) = 0.005d0
@@ -108,25 +93,13 @@ The key line is
 overshoot_scheme(1) = 'other'
 ```
 
-This tells MESA not to use one of its built-in overshooting prescriptions. Instead, MESA will call a user-supplied overshooting routine from `run_star_extras.f90`. In this implementation, the penetration extent is computed by the code and written to the history output as
+This tells MESA to call the user-supplied overshooting routine from `run_star_extras.f90`. You will be given a clean MESA `run_star_extras.f90` file and a modified version that implements convective penetration.
 
-```fortran
-alpha_pen_zone
-```
+Your task is to identify which parts of `run_star_extras.f90` are needed for the custom penetration scheme. The key pieces are listed below.
 
 ---
 
-## 5. What Needs to Be Modified in `run_star_extras.f90`
-
-You will be given a clean MESA `run_star_extras.f90` file and a modified version that implements convective penetration.
-
-Your task is not to blindly copy the full solution. Instead, identify which parts of `run_star_extras.f90` are needed for the custom penetration scheme and understand what each part does.
-
-The key pieces are listed below.
-
----
-
-### 5.1 Define Extra Variables
+### Task 4.1 Define Extra Variables
 
 Near the top of the module, after
 
@@ -134,33 +107,20 @@ Near the top of the module, after
 implicit none
 ```
 
-the modified file defines extra variables that store information about the convective core and the penetration zone.
-
-For example, the implementation tracks quantities such as
+the modified file defines extra variables that store information about the convective core and the penetration zone. For example, the implementation tracks quantities such as
 
 ```fortran
-m_core
-mass_PZ
-delta_r_PZ
-alpha_PZ
-r_core
-rho_core_top
+m_core ! the convective core mass
+mass_PZ ! the mass of the penetration zone
+delta_r_PZ ! the radial width of the penetration zone
+alpha_PZ ! the dimensionless penetration extent
+r_core ! the radius of the convective core boundary
+rho_core_top ! the density at the top of the core
 ```
-
-These variables are used to store
-
-- the convective core mass,
-- the mass of the penetration zone,
-- the radial width of the penetration zone,
-- the dimensionless penetration extent,
-- the radius of the convective core boundary,
-- the density at the top of the core.
-
-Some of these should be declared as real variables. Others, such as mesh indices, should be declared as integers. You should check the modified file and decide which type each variable needs.
 
 ---
 
-### 5.2 Connect MESA to the Custom Overshooting Routine
+### Task 4.2 Connect MESA to the Custom Overshooting Routine
 
 Inside `extras_controls`, MESA must be told which custom routine to call when the inlist says
 
@@ -176,13 +136,9 @@ s% other_overshooting_scheme => extended_convective_penetration
 
 This is the hook that connects the inlist setting to the custom convective penetration routine.
 
-Without this line, MESA will not know which user-defined overshooting scheme to use.
-
 ---
 
-### 5.3 Add Extra History Columns
-
-Because `alpha_pen` is not an input parameter, we need to record the computed value in `history.data`.
+### Task 4.3 Add Extra History Columns
 
 This is done by modifying two routines:
 
@@ -203,23 +159,9 @@ rho_core_top_pen
 r_cb
 ```
 
-The most important quantity for this lab is
-
-```fortran
-alpha_pen_zone
-```
-
-This is the computed penetration extent in units of the local pressure scale height.
-
-In the code, this corresponds to the internal variable
-
-```fortran
-alpha_PZ
-```
-
 ---
 
-### 5.4 Add the Custom Overshooting Routine
+### Task 4.4 Add the Custom Overshooting Routine
 
 The main custom overshooting routine is called
 
@@ -227,11 +169,11 @@ The main custom overshooting routine is called
 extended_convective_penetration
 ```
 
-This routine does several things:
+This routine does:
 
 1. checks that the boundary is the top of a convective core;
 2. calls another routine to compute the penetration-zone width;
-3. uses the computed `alpha_PZ` as the width of a step-like penetration region;
+3. uses the computed `alpha_PZ` as the width of a step like penetration region;
 4. optionally attaches an exponential tail controlled by `overshoot_f(1)`;
 5. returns the diffusion coefficient profile `D`.
 
@@ -241,7 +183,7 @@ A key line in this routine is
 call dissipation_balanced_penetration(s, id)
 ```
 
-This computes the penetration-zone extent.
+This computes the penetration zone extent.
 
 Another important line is
 
@@ -249,20 +191,18 @@ Another important line is
 alpha_PZ = alpha_PZ + s%overshoot_f0(j)
 ```
 
-This means that the final step-like penetration region includes the computed penetration width plus the small offset set by `overshoot_f0`.
+This means that the final step like penetration region includes the computed penetration width plus the small offset set by `overshoot_f0`.
 
-This is why, for the first pass, we use
+This is why we use
 
 ```fortran
-overshoot_f0(1) = 0.005
 overshoot_f(1) = 0.00
+overshoot_f0(1) = 0.005
 ```
-
-rather than trying to scan `alpha_pen` directly.
 
 ---
 
-### 5.5 Compute the Penetration Width
+### Task 4.5 Compute the Penetration Width
 
 The penetration width is computed in the routine
 
@@ -270,11 +210,7 @@ The penetration width is computed in the routine
 dissipation_balanced_penetration
 ```
 
-This routine estimates how far the convective penetration zone should extend beyond the formal convective boundary.
-
-The basic idea is that convection produces buoyant work inside the convective core. The penetration zone extends outward until this work is balanced by dissipation and negative buoyant work in the stable region.
-
-For this lab, you do not need to rederive the prescription. Instead, focus on identifying how the code computes
+This routine estimates how far the convective penetration zone should extend beyond the convective boundary. For this lab, let's focus on identifying how the code computes
 
 ```fortran
 delta_r_PZ
@@ -289,28 +225,20 @@ alpha_PZ = delta_r_PZ / h
 
 where `h` is the local pressure scale height near the convective core boundary.
 
-Thus, `alpha_PZ` is the penetration-zone width measured in units of the local pressure scale height.
-
 ---
 
-### 5.6 Optional: Extra Mesh Refinement
+### Task 4.6 Optional: Extra Mesh Refinement
 
-The modified implementation also includes an optional mesh refinement routine near the core boundary.
-
-This is useful because the Brunt-Vaisala frequency and the composition gradient can vary rapidly near the convective boundary.
-
-The relevant hook has the form
+The modified implementation also includes an optional mesh refinement routine near the core boundary. This is useful because the Brunt–Väisälä frequency and the composition gradient can vary rapidly near the convective boundary. The relevant hook has the form
 
 ```fortran
 s% use_other_mesh_delta_coeff_factor = .true.
 s% other_mesh_delta_coeff_factor => mesh_delta_coeff_core_boundary
 ```
 
-This part is useful for obtaining cleaner profiles, but it is secondary to the main convective penetration implementation.
-
 ---
 
-## 6. Model Grid
+## Task 5. Model Grid
 
 Run the model grid listed in the shared spreadsheet:
 
@@ -330,20 +258,66 @@ For this lab, define TAMS as
 xa_central_lower_limit_species(1) = 'h1'
 xa_central_lower_limit(1) = 0.01
 ```
+## Solution Files and Naming Conventions
+
+Example solution files are provided in the same GitHub directory as this tutorial. The filenames contain placeholders such as `X.X`. Please replace these placeholders with your desired mixing parameters and initial stellar mass before running the models.
+
+For the penetration-convection runs, remember that the main penetration strength parameter is coded in `run_star_extras_solution.f90`. You should change
+
+```fortran
+real(dp), parameter :: f = X.Xd0
+```
+near line 536 to the desired value, for example f = 0.98d0, 0.86d0, or 0.72d0. After changing this value, recompile with:
+
+```bash
+./mk
+```
+In the solution files, we use separate local output directories for the three mixing prescriptions:
+
+```text
+LOGS_step_ov
+LOGS_exp_ov
+LOGS_PC
+```
+
+For example, in the exponential overshoot ZAMS run, the saved model may be written as 
+
+```fortran
+save_model_filename = './LOGS_exp_ov/exp_ov_zams.model'
+```
+When you run a different parameter value, you may want to change the output directory or saved model filename to avoid overwriting previous runs.
+
+## Example One Run
+For step overshooting, two solution inlists are provided:
+
+inlist_step_ov_ZAMS_solution
+inlist_step_ov_MS_solution
+
+Use `inlist_step_ov_ZAMS_solution` for the first-stage run, from the pre-main sequence to ZAMS. This run uses:
+
+```fortran
+stop_near_zams = .true.
+```
+
+and saves the ZAMS model. Then use `inlist_step_ov_MS_solution` for the second-stage run, from the saved ZAMS model to the late main sequence. This run loads the saved ZAMS file and stops when the central hydrogen abundance reaches 0.1:
+
+```fortran
+xa_central_lower_limit_species(1) = 'h1'
+xa_central_lower_limit(1) = 0.1
+```
+The same two stage workflow should be followed for the exponential overshoot and penetration convection cases.
 
 ---
 
 ## 7. What to Record
 
-For each run, record the following quantities in the spreadsheet: initial mass, final age/luminosity/radius, the first 10 to 20 g modes, the `g_10` mode as a compact seismic diagnostic.
-For penetration runs, `alpha_pen_zone`.
+For this lab, you need to record the seismic fit quality for each model. The shared Google Sheet already provides the target g-mode frequencies for `n_pg = -20` to `-10`. For each MESA+GYRE model, use the final MESA model, namely the profile with central hydrogen abundance closest to `Xc(H) = 0.1`, extract the corresponding GYRE model frequencies, and compute a single `Chi^2` value. An unweighted Chi^2 can be computed as: 
 
----
+```Python
+Chi2 = np.sum((freq_model - freq_target)**2)
+```
 
-## 8. Discussion Questions
+Record this `Chi^2` value in the table cell corresponding to the model's initial mass and mixing parameter. After all models are filled in, the cell with the smallest `Chi^2` identifies the best-fit model within this grid.
 
-1. How does the choice of convective boundary mixing prescription change the TAMS structure?
-2. Does step overshooting produce a sharper or smoother core-boundary structure than exponential overshooting?
-3. In the penetration runs, how does the computed `alpha_pen_zone` vary with stellar mass?
-4. Do the differences in the Brunt-Vaisala frequency profile show up in the g-mode spectrum?
-5. Can a tuned overshooting model mimic the seismic signature of convective penetration?
+
+
