@@ -585,7 +585,7 @@ fig.savefig("compare_XcH050_structure.png", dpi=300, bbox_inches="tight")
 
 ### Example Output
 
-The figure below shows an example comparison at approximately `Xc(H) = 0.5`. The upper panel compares the hydrogen and helium abundance profiles, while the lower panel shows the corresponding propagation diagram for the three mixing prescriptions.
+The figure below shows an example comparison at approximately `Xc(H) = 0.5`. The upper panel compares the hydrogen and helium abundance profiles, while the lower panel shows the corresponding propagation diagram for the three mixing prescriptions. The complete solution script for Task 8 is provided as `diff_mixing_profiles_for_asteroseismology.py`.
 
 <img src="https://github.com/astroscien/2026MESA-school-day2-lab3/blob/main/compare_XcH050_structure.png?raw=true" width="750">
 
