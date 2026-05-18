@@ -46,7 +46,7 @@ overshoot_D_min = 1d-2
 
 The difference between `overshoot_f` and `overshoot_f0` is shown schematically below. `overshoot_D_min` sets the lower cutoff for the overshoot mixing diffusion coefficient.
 
-![MESA overshooting schematic](https://mesa-leuven.4d-star.org/tutorials/monday/overshoot_explanation.png)
+<img src="https://mesa-leuven.4d-star.org/tutorials/monday/overshoot_explanation.png" width="650">
 
 *Credit: 2025 MESA School in Leuven Day 1 tutorial material.*
 
