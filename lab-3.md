@@ -40,12 +40,12 @@ A typical setup is
 
 ```fortran
 overshoot_scheme(1) = 'exponential' ! options: 'exponential', 'step', 'other'
-overshoot_zone_type(1) = 'burn_H'   ! options: 'burn_H', 'burn_He', 'burn_Z', 'nonburn', 'any'
+overshoot_zone_type(1) = 'any'   ! options: 'burn_H', 'burn_He', 'burn_Z', 'nonburn', 'any'
 overshoot_zone_loc(1) = 'core'      ! options: 'core', 'shell', 'any'
 overshoot_bdy_loc(1) = 'top'        ! options: 'bottom', 'top', 'any'
 
-overshoot_f(1) = 1.6d-2
-overshoot_f0(1) = 8.0d-3
+overshoot_f(1) = 0.2d0
+overshoot_f0(1) = 0.005d0
 overshoot_D_min = 1d-2
 ```
 
@@ -65,12 +65,12 @@ Use the same location controls, but change the scheme:
 
 ```fortran
 overshoot_scheme(1) = 'step'
-overshoot_zone_type(1) = 'burn_H'
+overshoot_zone_type(1) = 'any'
 overshoot_zone_loc(1) = 'core'
 overshoot_bdy_loc(1) = 'top'
 
 overshoot_f(1) = 0.2d0
-overshoot_f0(1) = 0.1d0
+overshoot_f0(1) = 0.005d0
 overshoot_D_min = 1d-2
 ```
 
@@ -97,9 +97,9 @@ overshoot_zone_type(1) = 'any'
 overshoot_zone_loc(1) = 'core'
 overshoot_bdy_loc(1) = 'top'
 
-overshoot_f0(1) = 0.005
 overshoot_f(1) = 0.00
-! overshoot_D0(1) = 0.005
+overshoot_f0(1) = 0.005d0
+overshoot_D_min = 1d-2
 ```
 
 The key line is
@@ -108,9 +108,7 @@ The key line is
 overshoot_scheme(1) = 'other'
 ```
 
-This tells MESA not to use one of its built-in overshooting prescriptions. Instead, MESA will call a user-supplied overshooting routine from `run_star_extras.f90`.
-
-Do not treat `alpha_pen` as an input parameter. In this implementation, the penetration extent is computed by the code and written to the history output as
+This tells MESA not to use one of its built-in overshooting prescriptions. Instead, MESA will call a user-supplied overshooting routine from `run_star_extras.f90`. In this implementation, the penetration extent is computed by the code and written to the history output as
 
 ```fortran
 alpha_pen_zone
