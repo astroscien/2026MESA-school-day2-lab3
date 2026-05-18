@@ -582,3 +582,7 @@ ax_prop.set_ylim(-0.5, 2.2)
 ax_prop.legend(frameon=False, fontsize=10, ncol=2)
 fig.savefig("compare_XcH050_structure.png", dpi=300, bbox_inches="tight")
 ```
+
+## References
+
+- [Johnston et al. (2024)](https://ui.adsabs.harvard.edu/abs/2024ApJ...964..170J/abstract), *Modelling Time-dependent Convective Penetration in 1D Stellar Evolution*, ApJ, 964, 170.
