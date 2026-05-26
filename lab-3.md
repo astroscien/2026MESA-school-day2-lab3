@@ -64,7 +64,7 @@ Step overshooting assumes that the material is fully mixed out to a fixed distan
 ```fortran
 overshoot_scheme(1) = 'step'
 
-overshoot_f(1) = 0.2d0
+overshoot_f(1) = X.Xd0
 overshoot_f0(1) = 0.005d0
 overshoot_D_min = 1d-2
 ```
@@ -88,7 +88,7 @@ A typical setup is
 ```fortran
 overshoot_scheme(1) = 'exponential' ! options: 'exponential', 'step', 'other'
 
-overshoot_f(1) = 0.02d0
+overshoot_f(1) = X.XXd0
 overshoot_f0(1) = 0.005d0
 overshoot_D_min = 1d-2
 ```
