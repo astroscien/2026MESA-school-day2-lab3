@@ -49,8 +49,8 @@
 
 
 ! Mixing
-    set_min_D_mix = .true.
-    min_D_mix = 1000.0000d0
+    ! set_min_D_mix = .true.
+    ! min_D_mix = 1000.0000d0
 
     use_Ledoux_criterion = .true.
     MLT_option = 'Cox'
