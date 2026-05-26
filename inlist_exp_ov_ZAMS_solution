@@ -42,8 +42,8 @@
     initial_z = 0.02000d0
 
 ! Mixing
-    min_D_mix = 1000.0000d0		! Minimum diffusion coefficient for mixing
-    set_min_D_mix = .true.
+    ! min_D_mix = 1000.0000d0		! Minimum diffusion coefficient for mixing
+    ! set_min_D_mix = .true.
 
     use_Ledoux_criterion = .true.	! Use the Ledoux criterion for convective stability.
     MLT_option = 'Cox'			! Use the Cox formulation of mixing-length theory.
