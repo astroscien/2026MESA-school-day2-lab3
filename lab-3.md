@@ -527,13 +527,14 @@ fig, (ax_abun, ax_prop) = plt.subplots(
 for label, logdir in runs.items():
     prof = find_profile_at_xc(logdir, TARGET_XC)
 
-    r = prof["radius"].to_numpy()
+    mfrac = prof["mass"].to_numpy() / prof["mass"].max()
 
     # Abundance diagram
     ax_abun.plot(
         r,
         prof["h1"],
-        lw=2.0,
+        lw=1.0,
+        alpha=0.6,
         label=rf"{label}: $X_\mathrm{{H}}$",
         **styles[label],
     )
@@ -541,8 +542,8 @@ for label, logdir in runs.items():
     ax_abun.plot(
         r,
         prof["he4"],
-        lw=1.5,
-        alpha=0.7,
+        lw=1.0,
+        alpha=0.6,
         label=rf"{label}: $Y_\mathrm{{He}}$",
         **styles[label],
     )
@@ -556,18 +557,19 @@ for label, logdir in runs.items():
     S1_cpd = np.maximum(prof["lamb_Sl1"].to_numpy(), small) * 1e-6 * DAY
 
     ax_prop.plot(
-        r,
+        mfrac,
         np.log10(N_cpd),
-        lw=2.0,
+        lw=1.0,
+        alpha=0.6,
         label=rf"{label}: $N/2\pi$",
         **styles[label],
     )
 
     ax_prop.plot(
-        r,
+        mfrac,
         np.log10(S1_cpd),
-        lw=1.5,
-        alpha=0.7,
+        lw=1.0,
+        alpha=0.6,
         label=rf"{label}: $S_{{\ell=1}}/2\pi$",
         **styles[label],
     )
@@ -576,7 +578,7 @@ ax_abun.set_ylabel("Mass fraction")
 ax_abun.set_ylim(-0.03, 1.03)
 ax_abun.legend(frameon=False, fontsize=10, ncol=2)
 
-ax_prop.set_xlabel(r"$r/R_\odot$")
+ax_prop.set_xlabel(r"$m/M_\star$")
 ax_prop.set_ylabel(r"$\log_{10}(\mathrm{frequency}/\mathrm{day}^{-1})$")
 ax_prop.set_ylim(-0.5, 2.2)
 ax_prop.legend(frameon=False, fontsize=10, ncol=2)
@@ -587,7 +589,7 @@ fig.savefig("compare_XcH050_structure.png", dpi=300, bbox_inches="tight")
 
 The figure below shows an example comparison at approximately `Xc(H) = 0.5`. The upper panel compares the hydrogen and helium abundance profiles, while the lower panel shows the corresponding propagation diagram for the three mixing prescriptions. The complete solution script for Task 8 is provided as `diff_mixing_profiles_for_asteroseismology.py`.
 
-<img src="https://github.com/astroscien/2026MESA-school-day2-lab3/blob/main/compare_XcH050_structure.png?raw=true" width="750">
+<img src="https://github.com/astroscien/2026MESA-school-day2-lab3/blob/main/compare_XcH050_structure_mass_fraction_f0p86.png?raw=true" width="750">
 
 ---
 
