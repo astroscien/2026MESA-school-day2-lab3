@@ -122,7 +122,7 @@ overshoot_scheme(1) = 'other'
 
 This tells MESA to call the user-supplied overshooting routine from `run_star_extras.f90`. You will be given a clean MESA `run_star_extras.f90` file and a modified version that implements convective penetration.
 
-Before running the models, find the line
+Before running the models, find the line in `run_star_extras.f90`
 
 ```fortran
 real(dp), parameter :: f = X.Xd0
@@ -295,7 +295,7 @@ For the penetration-convection runs, remember that the main penetration strength
 ```fortran
 real(dp), parameter :: f = X.Xd0
 ```
-near line 536 to the desired value, for example f = 0.98d0, 0.86d0, or 0.72d0. After changing this value, recompile with:
+near line 536 to the desired value, then recompile with:
 
 ```bash
 ./mk
