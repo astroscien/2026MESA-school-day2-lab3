@@ -10,6 +10,31 @@ In this lab, we will study how different convective boundary mixing prescription
 
 The main goal is to understand how these mixing prescriptions modify the near-core chemical-gradient region and the Brunt–Väisälä frequency profile. These structural differences may leave measurable signatures in stellar eigenmodes.
 
+All inlist and solution files are available here: [Lab 3 GitHub repository](https://github.com/astroscien/2026MESA-school-day2-lab3)
+
+We use a two-step evolution. Taking the step overshooting case as an example:
+
+1. `inlist_step_ov_ZAMS_solution` evolves the model from the pre-main sequence to the ZAMS and saves the ZAMS model for the next step.
+2. `inlist_step_ov_MS_solution` starts from the saved ZAMS model and evolves the star to a later main-sequence phase. During this step, MESA also outputs `.GYRE` files for the asteroseismic analysis.
+
+Before running the models, remember to replace all placeholder values such as
+
+```fortran
+X.X
+```
+
+with the parameter values assigned in the spreadsheet.
+
+For the current grid, use:
+
+```text
+Step overshooting:
+0.02, 0.14, 0.28
+
+Exponential overshooting:
+0.002, 0.014, 0.028
+```
+
 In the first part of the lab, we will build MESA models using different mixing prescriptions. Next, we will inspect their internal structures at an intermediate main-sequence stage. Finally, we will use GYRE to compute g-mode frequencies, compare them with a reference set of modes, and identify the best-fit model.
 
 ---
@@ -74,9 +99,11 @@ In the model grid, we will vary `overshoot_f(1)`.
 
 ## Task 4. Convective Penetration
 
-Convective penetration is different from standard MESA overshooting. Material beyond the convective boundary is chemically mixed, but the thermal structure is usually still treated as radiative. In convective penetration, convective motions penetrate into the formally stable region and can modify both the chemical composition and the thermal stratification. In the implementation used here, the penetration extent is computed inside `run_star_extras.f90`.
+Convective penetration is different from standard MESA overshooting. Material beyond the convective boundary is chemically mixed, but the thermal structure is usually still treated as radiative. In convective penetration, convective motions penetrate into the formally stable region and can modify both the chemical composition and the thermal stratification. In the implementation used here, the penetration extent is computed inside `run_star_extras.f90`. The coding part of this implementation is relatively complicated. For this lab, the task is to identify which parts of `run_star_extras.f90` are needed for the custom penetration scheme, understand what each part does, and then use the supplied solution file as the working implementation.
 
-For the convective penetration runs, use
+The solution file is available here: [run_star_extras_solution.f90](https://github.com/astroscien/2026MESA-school-day2-lab3/tree/main)
+
+In the inlists for the convective penetration runs, use
 
 ```fortran
 ! Overshooting
@@ -95,7 +122,13 @@ overshoot_scheme(1) = 'other'
 
 This tells MESA to call the user-supplied overshooting routine from `run_star_extras.f90`. You will be given a clean MESA `run_star_extras.f90` file and a modified version that implements convective penetration.
 
-Your task is to identify which parts of `run_star_extras.f90` are needed for the custom penetration scheme. The key pieces are listed below.
+Before running the models, find the line
+
+```fortran
+real(dp), parameter :: f = X.Xd0
+```
+
+and replace `X.Xd0` with the value specified for your run (0.98, 0.86 or 0.72).
 
 ---
 
