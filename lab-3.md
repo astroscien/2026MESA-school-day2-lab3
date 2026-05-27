@@ -577,7 +577,7 @@ for label, logdir in runs.items():
 
     # Abundance diagram
     ax_abun.plot(
-        r,
+        mfrac,
         prof["h1"],
         lw=1.0,
         alpha=0.6,
@@ -586,7 +586,7 @@ for label, logdir in runs.items():
     )
 
     ax_abun.plot(
-        r,
+        mfrac,
         prof["he4"],
         lw=1.0,
         alpha=0.6,
