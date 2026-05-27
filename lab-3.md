@@ -357,6 +357,7 @@ For each LOGS_* directory, find the main sequence history file, such as `step_ov
 ### Code Block 1: Basic Setup
 
 This block imports the required packages, defines the target central hydrogen abundance, and lists the three output directories.
+
 <details>
     <summary>Click to show the full Python solution</summary>
     
@@ -382,6 +383,7 @@ styles = {
     "PC":      dict(color="C2", ls=":"),
 }
 ```
+
 </details>
 
 ### Code Block 2: Read a MESA History or Profile File
@@ -404,6 +406,7 @@ def read_mesa_table(path):
 
     return pd.read_csv(StringIO(data), sep=r"\s+", names=cols)
 ```
+
 <details>
 
 ### Code Block 3: Read profiles.index
@@ -436,6 +439,7 @@ def read_profiles_index(logdir):
         f"Cannot find profiles.index or profile.index in {logdir}"
     )
 ```
+
 <details>
 
 ### Code Block 4: Find the History and Profile File
@@ -456,6 +460,7 @@ def find_history_file(logdir):
 
     return candidates[0]
 ```
+
 <details>
 
 <details>
@@ -484,6 +489,7 @@ def find_profile_file(logdir, profile_number):
         f"Cannot find profile file for profile_number={profile_number} in {logdir}"
     )
 ```
+
 <details>
 
 ### Code Block 5: Find the Profile Closest to Xc(H) = 0.5
@@ -534,6 +540,7 @@ def find_profile_at_xc(logdir, target=0.5):
 
     return prof
 ```
+
 <details>
 
 ### Code Block 6: Make the Comparison Plot
@@ -630,6 +637,7 @@ ax_prop.set_ylim(-0.5, 2.2)
 ax_prop.legend(frameon=False, fontsize=10, ncol=2)
 fig.savefig("compare_XcH050_structure.png", dpi=300, bbox_inches="tight")
 ```
+
 <details>
 
 ### Example Output
