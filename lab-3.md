@@ -407,7 +407,7 @@ def read_mesa_table(path):
     return pd.read_csv(StringIO(data), sep=r"\s+", names=cols)
 ```
 
-<details>
+</details>
 
 ### Code Block 3: Read profiles.index
 
@@ -440,7 +440,7 @@ def read_profiles_index(logdir):
     )
 ```
 
-<details>
+</details>
 
 ### Code Block 4: Find the History and Profile File
 
@@ -461,7 +461,7 @@ def find_history_file(logdir):
     return candidates[0]
 ```
 
-<details>
+</details>
 
 <details>
     <summary>Click to show the full Python solution</summary>
@@ -490,7 +490,7 @@ def find_profile_file(logdir, profile_number):
     )
 ```
 
-<details>
+</details>
 
 ### Code Block 5: Find the Profile Closest to Xc(H) = 0.5
 
@@ -541,7 +541,7 @@ def find_profile_at_xc(logdir, target=0.5):
     return prof
 ```
 
-<details>
+</details>
 
 ### Code Block 6: Make the Comparison Plot
 
@@ -638,7 +638,7 @@ ax_prop.legend(frameon=False, fontsize=10, ncol=2)
 fig.savefig("compare_XcH050_structure.png", dpi=300, bbox_inches="tight")
 ```
 
-<details>
+</details>
 
 ### Example Output
 
