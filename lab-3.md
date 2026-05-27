@@ -359,7 +359,7 @@ For each LOGS_* directory, find the main sequence history file, such as `step_ov
 This block imports the required packages, defines the target central hydrogen abundance, and lists the three output directories.
 
 <details>
-    <summary>Click to show the full Python solution</summary>
+    <summary>Python: imports, constants, and run labels</summary>
     
 ```python
 import numpy as np
@@ -391,7 +391,7 @@ styles = {
 MESA history and profile files have a header section, then a blank line, then the main data table. This helper function reads the main table into a pandas DataFrame.
 
 <details>
-    <summary>Click to show the full Python solution</summary>
+    <summary>Python: helper function for MESA tables</summary>
     
 ```python
 def read_mesa_table(path):
@@ -414,7 +414,7 @@ def read_mesa_table(path):
 The history file tells us which model_number is closest to `Xc(H)=0.5`. The `profiles.index` file tells us which profile file corresponds to that model.
 
 <details>
-    <summary>Click to show the full Python solution</summary>
+    <summary>Python: read profiles.index</summary>
     
 ```python
 def read_profiles_index(logdir):
@@ -445,7 +445,7 @@ def read_profiles_index(logdir):
 ### Code Block 4: Find the History and Profile File
 
 <details>
-    <summary>Click to show the full Python solution </summary>
+    <summary>Python: locate history and profile files</summary>
     
 ```python
 def find_history_file(logdir):
@@ -488,7 +488,7 @@ def find_profile_file(logdir, profile_number):
 ### Code Block 5: Find the Profile Closest to Xc(H) = 0.5
 
 <details>
-    <summary>Click to show the full Python solution</summary>
+    <summary>Python: select the profile closest to Xc(H)=0.5</summary>
     
 ```python
 def find_profile_at_xc(logdir, target=0.5):
@@ -559,7 +559,7 @@ lamb_Sl1 * 1e-6 * 86400 = cycles/day
 ```
 
 <details>
-    <summary>Click to show the full Python solution</summary>
+    <summary>Python: make the abundance and propagation plots</summary>
     
 ```python
 fig, (ax_abun, ax_prop) = plt.subplots(
