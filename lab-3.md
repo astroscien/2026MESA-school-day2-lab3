@@ -445,7 +445,7 @@ def read_profiles_index(logdir):
 ### Code Block 4: Find the History and Profile File
 
 <details>
-    <summary>Click to show the full Python solution</summary>
+    <summary>Click to show the full Python solution </summary>
     
 ```python
 def find_history_file(logdir):
@@ -459,14 +459,7 @@ def find_history_file(logdir):
         raise FileNotFoundError(f"No history file found in {logdir}")
 
     return candidates[0]
-```
 
-</details>
-
-<details>
-    <summary>Click to show the full Python solution</summary>
-
-```python
 def find_profile_file(logdir, profile_number):
 
     profile_number = int(profile_number)
