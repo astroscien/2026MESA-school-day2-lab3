@@ -375,16 +375,7 @@ The terminal column
 Re(omega)
 ```
 
-is the real part of the mode frequency in GYRE's current frequency units. If the GYRE inlist uses dimensionless frequencies, then these values must be converted before comparing with target frequencies in physical units.
-
-Before computing `Chi^2`, make sure that the model frequencies and the target frequencies are in the same units.
-
-For this lab, the safest procedure is:
-
-1. check the GYRE inlist to see which frequency units are being used;
-2. extract the frequencies for `n_pg = -20` to `-10`;
-3. convert them if needed;
-4. compare them to the target frequencies in the Google Sheet.
+is the real part of the mode frequency. In this lab, we are running adiabatic oscillation calculations. This means that we ignore heat exchange during one oscillation cycle, so the modes do not grow or decay. Therefore, the eigenfrequencies are real numbers. In a non-adiabatic calculation, the eigenfrequency is generally complex. The real part gives the oscillation frequency, while the imaginary part describes mode growth or damping. A growing mode is unstable and may become observable if it reaches a detectable amplitude, while a damped mode is stable and tends to decay unless it is continuously excited.
 
 ### Compute the Fit Quality
 
