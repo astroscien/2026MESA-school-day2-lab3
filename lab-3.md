@@ -164,7 +164,7 @@ The important line has the form
 s% other_overshooting_scheme => extended_convective_penetration
 ```
 
-This is the hook that connects the inlist setting to the custom convective penetration routine.
+This is the hook that connects the inlist setting to the custom convective penetration routine. Therefore, the same `run_star_extras.f90` file can be used for the whole lab: the custom routine is only used when `overshoot_scheme(1) = 'other'`, while the step and exponential runs use MESA's built-in schemes.
 
 
 ### Guided Check 3: Add Extra History Columns
@@ -179,13 +179,13 @@ data_for_extra_history_columns
 The modified implementation writes seven extra history columns:
 
 ```fortran
-m_core
-mass_pen_zone
-delta_r_pen_zone
-alpha_pen_zone
-r_core
-rho_core_top_pen
-r_cb
+m_core ! convective core mass
+mass_pen_zone ! mass contained in the penetration zone
+delta_r_pen_zone ! radial width of the penetration zone
+alpha_pen_zone ! penetration-zone width in units of the local pressure scale height
+r_core ! radius of the convective core boundary
+rho_core_top_pen ! density near the top of the convective penetration zone
+r_cb ! radius of the convective boundary
 ```
 
 
@@ -240,8 +240,8 @@ dissipation_balanced_penetration
 This routine estimates how far the convective penetration zone should extend beyond the convective boundary. For this lab, let's focus on identifying how the code computes
 
 ```fortran
-delta_r_PZ
-alpha_PZ
+delta_r_PZ ! physical radial width of the penetration zone
+alpha_PZ ! delta_r_PZ divided by the local pressure scale height
 ```
 
 The key relation is
@@ -260,7 +260,6 @@ The modified implementation also includes an optional mesh refinement routine ne
 s% use_other_mesh_delta_coeff_factor = .true.
 s% other_mesh_delta_coeff_factor => mesh_delta_coeff_core_boundary
 ```
-
 
 ---
 
@@ -329,7 +328,67 @@ The same two stage workflow should be followed for the exponential overshoot and
 
 ## Task 1. What to Record
 
-For this lab, you need to record the seismic fit quality for each model. The shared Google Sheet already provides the target g-mode frequencies for `n_pg = -20` to `-10`. For each MESA+GYRE model, use the final MESA model, namely the profile with central hydrogen abundance closest to `Xc(H) = 0.1`, extract the corresponding GYRE model frequencies, and compute a single `Chi^2` value. An unweighted Chi^2 can be computed as: 
+For this lab, you need to record the seismic fit quality for each model. The shared Google Sheet already provides the target g-mode frequencies for `n_pg = -20` to `-10`. For each MESA+GYRE model, use the final MESA model, namely the profile with central hydrogen abundance closest to `Xc(H) = 0.1`.
+
+### Where to Find the GYRE Eigenmodes
+
+GYRE reports the eigenmodes in two places:
+
+1. in the terminal output while GYRE is running;
+2. in the GYRE summary/output files, if summary output is enabled in the GYRE inlist.
+
+For a quick check, the terminal output is often enough. During the root-solving step, GYRE prints a table like this:
+
+```text
+Root Solving
+   l    m    n_pg    n_p    n_g       Re(omega)       Im(omega)        chi n_iter
+   1    0     -20      0     20  0.63087941E+00  0.00000000E+00 0.3165E-12      7
+   1    0     -19      0     19  0.66841184E+00  0.00000000E+00 0.3904E-12      8
+   1    0     -18      0     18  0.69832663E+00  0.00000000E+00 0.1748E-12      6
+   ...
+   1    0     -10      0     10  0.12513287E+01  0.00000000E+00 0.1019E-12      7
+```
+
+For this lab, use the dipole modes with
+
+```text
+l = 1
+m = 0
+n_pg = -20 to -10
+```
+
+Equivalently, for these g modes, you can identify them by
+
+```text
+n_g = 20 to 10
+```
+
+because `n_pg` is negative for g modes.
+
+### Important: Frequency Units
+
+Be careful with units. By default, GYRE prints the dimensionless angular frequency `omega`.
+
+The terminal column
+
+```text
+Re(omega)
+```
+
+is the real part of the mode frequency in GYRE's current frequency units. If the GYRE inlist uses dimensionless frequencies, then these values must be converted before comparing with target frequencies in physical units.
+
+Before computing `Chi^2`, make sure that the model frequencies and the target frequencies are in the same units.
+
+For this lab, the safest procedure is:
+
+1. check the GYRE inlist to see which frequency units are being used;
+2. extract the frequencies for `n_pg = -20` to `-10`;
+3. convert them if needed;
+4. compare them to the target frequencies in the Google Sheet.
+
+### Compute the Fit Quality
+
+Once the model and target frequencies are in the same units, compute an unweighted `Chi^2` value:
 
 ```Python
 Chi2 = np.sum((freq_model - freq_target)**2)
