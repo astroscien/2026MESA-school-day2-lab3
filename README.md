@@ -57,4 +57,4 @@ These files are:
   
 ## Acknowledgements
 
-Meng Sun from the National Astronomical Observatories, Chinese Academy of Sciences, thanks Daniel Lecoanet for designing this lab. Meng Sun also thanks Lynn Buchele, Caleb Eastlund, Ducheng Lu, Lucas de Sá and Mathijs Vanrespaille for helping test the lab materials, estimate the computational cost and providing useful comments and feedbacks.
+Meng Sun from the National Astronomical Observatories, Chinese Academy of Sciences, thanks Daniel Lecoanet for designing this lab. Meng Sun also thanks Lynn Buchele, Caleb Eastlund, Ducheng Lu, Lucas de Sá, Andy Santarelli, Lieke van Son, and Mathijs Vanrespaille for helping test the lab materials, estimate the computational cost, provide useful comments and feedback, and conduct detailed reviews of the lab, with names listed in alphabetical order by surname. Last but not least, Meng Sun thanks Meridith Joyce and Jared Goldberg for organizing this school and for all the behind-the-scenes work that made it possible.
