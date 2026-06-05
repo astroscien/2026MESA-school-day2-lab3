@@ -6,12 +6,12 @@
   ! begin with a pre-main sequence model
     create_pre_main_sequence_model = .false.
     load_saved_model = .true.
-    load_model_filename =  './LOGS_exp_ov/exp_ov_ZAMS.model' !!! To-do
+    load_model_filename =                                  !!! To-do
 
 
   ! save a model at the end of the run
     save_model_when_terminate = .true.
-    save_model_filename = './LOGS_exp_ov/exp_ov_TAMS.model'  !!! To-do
+    save_model_filename = './LOGS_XXXXX/XXXXX_TAMS.model'  !!! To-do
 
 
    ! change_net = .true.
@@ -59,15 +59,15 @@
     predictive_bdy_loc(1) = 'top'
 
 ! Overshooting
-    overshoot_zone_type(1) = 'any'
-    overshoot_zone_loc(1)  = 'core'
-    overshoot_bdy_loc(1)   = 'top'
+    overshoot_zone_type(1) =        !!! To-do
+    overshoot_zone_loc(1) =         !!! To-do
+    overshoot_bdy_loc(1) =          !!! To-do
     
     ! options: 'exponential', 'step', 'other'
-    overshoot_scheme(1) = 'step'
+    overshoot_scheme(1) =           !!! To-do 
 
-    overshoot_f(1) = 0.14d0
-    overshoot_f0(1) = 0.005d0
+    overshoot_f(1) =                !!! To-do
+    overshoot_f0(1) =               !!! To-do
     overshoot_D_min = 1d-2
 
 ! add superadiabatic reduction for massive stars
@@ -116,11 +116,11 @@
 ! Output
 
     photo_interval = 50000
-    log_directory = 'LOGS_exp_ov'                !!! To-do
+    log_directory = 'LOGS_XXXXX'                !!! To-do
     terminal_interval = 100
     do_history_file = .true.
     history_interval = 1
-    star_history_name = 'exp_ov_MS.history'      !!! To-do
+    star_history_name = 'XXXXX_MS.history'      !!! To-do
 
     write_profiles_flag = .true.
     max_num_profile_models = 99999

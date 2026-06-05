@@ -1,16 +1,17 @@
 &star_job
 
-  pgstar_flag = .false. ! Turn off the pgstar graphical interface.
+    pgstar_flag = .false. ! Turn off the pgstar graphical interface.
 
-  ! begin with a pre-main sequence model
+    ! begin with a pre-main sequence model
     create_pre_main_sequence_model = .true.
     load_saved_model = .false.
 
-  ! save a model at the end of the run
+    ! save a model at the end of the run
     save_model_when_terminate = .true.
-    save_model_filename = './LOGS_step_ov/step_ov_zams.model'	! Filename of the saved ZAMS model. This will be used as the initial model for the next evolutionary run.
+    ! Filename of the saved ZAMS model. This will be used as the initial model for the next evolutionary run.
+    save_model_filename = './LOGS_step_ov/step_ov_ZAMS.model'	 !!! To-do
 
-! will be changed on the fly post C depletion
+    ! will be changed on the fly post C depletion
     new_net_name =  'cno_extras_o18_to_mg26_plus_fe56.net'	! 'mesa_45.net'
     show_net_species_info = .false.
 
@@ -38,7 +39,7 @@
 
 &controls
 
-    initial_mass = X.Xd0		! in Msun units
+    initial_mass = 4.0d0		! in Msun units !!! To-do
     initial_z = 0.02000d0
 
 ! Mixing
@@ -56,11 +57,14 @@
     predictive_bdy_loc(1) = 'top'	! Apply this predictive-mixing setting to the top boundary of the convective core.
 
 ! Overshooting
-    overshoot_scheme(1) = 'step'
     overshoot_zone_type(1) = 'any'
-    overshoot_zone_loc(1) = 'core'
-    overshoot_bdy_loc(1) = 'top'
-    overshoot_f(1) = X.X
+    overshoot_zone_loc(1)  = 'core'
+    overshoot_bdy_loc(1)   = 'top'
+
+    ! options: 'exponential', 'step', 'other'
+    overshoot_scheme(1) = 'step'
+
+    overshoot_f(1) = 0.14d0
     overshoot_f0(1) = 0.005d0
     overshoot_D_min = 1d-2
 
@@ -104,6 +108,9 @@
 ! When to stop
 
     stop_near_zams = .true.
+
+! Output
+    log_directory = 'LOGS_step_ov'            !!! To-do
 
 / ! end of controls namelist
 

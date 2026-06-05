@@ -17,9 +17,13 @@ DAY = 86400.0  # day to sec
 TARGET_XC = 0.5
 
 runs = {
-    "step ov": Path("LOGS_step_ov"),
-    "exp ov":  Path("LOGS_exp_ov"),
-    "PC":      Path("LOGS_PC"),
+    name: path
+    for name, path in {
+        "step ov": Path("LOGS_step_ov"),
+        "exp ov": Path("LOGS_exp_ov"),
+        "PC": Path("LOGS_PC"),
+    }.items()
+    if path.exists()
 }
 
 styles = {

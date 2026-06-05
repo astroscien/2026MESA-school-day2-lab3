@@ -9,7 +9,7 @@
     ! save a model at the end of the run
     save_model_when_terminate = .true.
     ! Filename of the saved ZAMS model. This will be used as the initial model for the next evolutionary run.
-    save_model_filename = './LOGS_PC/PC_ZAMS.model'	 !!! To-do
+    save_model_filename = './LOGS_XXXXX/XXXXX_ZAMS.model'	 !!! To-do
 
     ! will be changed on the fly post C depletion
     new_net_name =  'cno_extras_o18_to_mg26_plus_fe56.net'	! 'mesa_45.net'
@@ -39,7 +39,7 @@
 
 &controls
 
-    initial_mass = 4.0d0		! in Msun units !!! To-do
+    initial_mass = X.Xd0		! in Msun units !!! To-do
     initial_z = 0.02000d0
 
 ! Mixing
@@ -57,15 +57,15 @@
     predictive_bdy_loc(1) = 'top'	! Apply this predictive-mixing setting to the top boundary of the convective core.
 
 ! Overshooting
-    overshoot_zone_type(1) = 'any'
-    overshoot_zone_loc(1)  = 'core'
-    overshoot_bdy_loc(1)   = 'top'
+    overshoot_zone_type(1) =                !!! To-do
+    overshoot_zone_loc(1) =                 !!! To-do
+    overshoot_bdy_loc(1) =                  !!! To-do
 
     ! options: 'exponential', 'step', 'other'
-    overshoot_scheme(1) = 'other'
+    overshoot_scheme(1) =                   !!! To-do
 
-    overshoot_f(1) = 0.00
-    overshoot_f0(1) = 0.005d0
+    overshoot_f(1) = X.X                    !!! To-do
+    overshoot_f0(1) =                       !!! To-do
     overshoot_D_min = 1d-2
 
 ! add superadiabatic reduction for massive stars
@@ -110,7 +110,7 @@
     stop_near_zams = .true.
 
 ! Output
-    log_directory = 'LOGS_PC'            !!! To-do
+    log_directory = 'LOGS_XXXXX'            !!! To-do
 
 / ! end of controls namelist
 

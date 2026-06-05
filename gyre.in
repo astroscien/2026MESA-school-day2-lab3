@@ -1,0 +1,48 @@
+&constants
+/
+
+&model
+    model_type = 'EVOL'
+    file = './LOGS_XXXXX/profileXXX.data.GYRE'
+    file_format = 'MESA'
+/
+
+&mode
+    l = 1
+    m = 0
+    n_pg_min = -20
+    n_pg_max = -10
+/
+
+&osc
+    outer_bound = 'VACUUM'
+/
+
+&scan
+    grid_type = 'INVERSE'
+    freq_min = 0.2
+    freq_max = 10
+    n_freq = 500
+    freq_units = 'CYC_PER_DAY'
+/
+
+&rot
+/
+
+&grid
+/
+
+&num
+    diff_scheme = 'COLLOC_GL2'
+/
+
+&ad_output
+    summary_file = 'summary_XXXXX.h5'
+    summary_item_list = 'l,n_pg,m,freq'
+    summary_file_format = 'HDF'
+    freq_units = 'CYC_PER_DAY'
+/
+
+&nad_output
+/
+
